@@ -122,6 +122,20 @@ namespace MmMaker
 
             }
         }
+
+        private void SaveToFirebase_click(object sender, RoutedEventArgs e)
+        {
+            FirebaseConnector firebase = new FirebaseConnector();
+            firebase.Connect().ContinueWith(x =>
+                firebase.GetData()
+
+            );
+
+
+
+
+        }
+
     }
 
 }
