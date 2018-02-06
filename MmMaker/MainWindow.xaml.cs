@@ -127,7 +127,7 @@ namespace MmMaker
         {
             FirebaseConnector firebase = new FirebaseConnector();
             firebase.Connect().ContinueWith(x =>
-                firebase.GetData()
+                firebase.GetData(x.Result)
 
             );
 
