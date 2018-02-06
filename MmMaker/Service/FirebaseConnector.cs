@@ -14,16 +14,25 @@ namespace MmMaker.Service
     {
 
 
-        public async void GetData(FirebaseClient _client)
+        public async Task SaveData(FirebaseClient _client, List<ExcelContent> dataToSave)
         {
-            //
-            //await _client.Child("MM").PostAsync<ExcelContent>(new ExcelContent() {BarCode = 123 });
+            //Usuwa poprzednie dane
+            DeleteAll(_client).Wait();
+            
+            foreach (ExcelContent item in dataToSave)
+            {
+                FirebaseObject<ExcelContent> saved = await _client.Child("MM").Child("MMContent").PostAsync<ExcelContent>(item);
 
-            var q = await _client.Child("MM").OnceAsync<ExcelContent>();
+            }
 
         }
 
 
+
+        /// <summary>
+        /// Tworzy połączenie z bazą firebase
+        /// </summary>
+        /// <returns>Zwraca zadanie typu FirebaseClient</returns>
         public async Task<FirebaseClient> Connect()
         {
             //wykonuje autentykacje
@@ -42,5 +51,14 @@ namespace MmMaker.Service
             return _client;
         }
 
+        /// <summary>
+        /// Kasuje węzeł MMContent
+        /// </summary>
+        /// <param name="client">Połączenie z filrebase</param>
+        /// <returns></returns>
+        private async Task DeleteAll(FirebaseClient client)
+        {
+            await client.Child("MM").Child("MMContent").DeleteAsync();
+        }
     }
 }

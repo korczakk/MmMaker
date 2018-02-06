@@ -127,9 +127,10 @@ namespace MmMaker
         {
             FirebaseConnector firebase = new FirebaseConnector();
             firebase.Connect().ContinueWith(x =>
-                firebase.GetData(x.Result)
-
-            );
+            {
+                firebase.SaveData(x.Result, rows).Wait();
+                MessageBox.Show("Zapis danych zakończony", "Zapis", MessageBoxButton.OK, MessageBoxImage.Information);
+           });
 
 
 
