@@ -197,7 +197,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ExcelContent.cs" />
     <Compile Include="Model\ExcelFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -231,6 +230,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\MmMakerModel\MmMakerModel.csproj">
+      <Project>{10b33078-9802-4db8-a5a5-89bedb9b173c}</Project>
+      <Name>MmMakerModel</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MmMaker", "MmMaker\MmMaker.csproj", "{1F9C26BD-D404-4251-8D9E-072383823ECD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MmMakerModel", "MmMakerModel\MmMakerModel.csproj", "{10B33078-9802-4DB8-A5A5-89BEDB9B173C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1F9C26BD-D404-4251-8D9E-072383823ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F9C26BD-D404-4251-8D9E-072383823ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F9C26BD-D404-4251-8D9E-072383823ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10B33078-9802-4DB8-A5A5-89BEDB9B173C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10B33078-9802-4DB8-A5A5-89BEDB9B173C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10B33078-9802-4DB8-A5A5-89BEDB9B173C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10B33078-9802-4DB8-A5A5-89BEDB9B173C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
