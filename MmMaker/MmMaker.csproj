@@ -197,7 +197,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ExcelFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -231,6 +230,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MmMakerExcelManager\MmMakerExcelManager.csproj">
+      <Project>{0209D63C-191C-42C7-B2FD-9CDA3803DED4}</Project>
+      <Name>MmMakerExcelManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MmMakerModel\MmMakerModel.csproj">
       <Project>{10b33078-9802-4db8-a5a5-89bedb9b173c}</Project>
       <Name>MmMakerModel</Name>

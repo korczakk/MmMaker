@@ -1,19 +1,18 @@
-﻿using NPOI.HSSF.UserModel;
+﻿using MmMaker.Model;
+using NLog;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using MmMaker.Service;
-using System;
-using NLog;
-using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MmMaker.Model
+namespace MmMakerExcelManager
 {
-    public class ExcelFile
+    public class ExcelParser
     {
-        public string FileName { get; set; }
-        public List<ExcelContent> Content { get; set; }
-
         /// <summary>
         /// Otwarty skoroszyt Excela
         /// </summary>
@@ -23,31 +22,23 @@ namespace MmMaker.Model
         /// logger
         /// </summary>
         static Logger logger = LogManager.GetCurrentClassLogger();
+        private List<ExcelContent> Content;
+        private Stream _stream;
 
-        public ExcelFile()
+        public ExcelParser(Stream stream)
         {
             Content = new List<ExcelContent>();
-        }
 
-        /// <summary>
-        /// Ten konstruktor otwiera plik Excel, którego nazwa została przekazana w parametrze
-        /// </summary>
-        /// <param name="fileName"></param>
-        public ExcelFile(string fileName)
-        {
-            FileName = fileName;
-
-            Content = new List<ExcelContent>();
+            _stream = stream;
 
             //otwiera plik i przechowuje w polu
             _workBook = ReadExcelFile();
         }
 
-
         public List<ExcelContent> ParseExcel()
         {
             ISheet ws = _workBook.GetSheetAt(0);
-            List<ExcelContent> ExcelContent = new List<Model.ExcelContent>();
+            List<ExcelContent> ExcelContent = new List<ExcelContent>();
 
             //iteracja przez wiersze
             for (int i = 0; i < ws.LastRowNum; i++)
@@ -65,7 +56,7 @@ namespace MmMaker.Model
                 if (IsDataRow(row))
                 {
                     //Dane z wiersza zapisywane są do obiektu
-                    ExcelContent content = new Model.ExcelContent()
+                    ExcelContent content = new ExcelContent()
                     {
                         Id = Guid.NewGuid(),
                         BarCode = row.Cells[3].NumericCellValue,
@@ -82,47 +73,7 @@ namespace MmMaker.Model
 
             return ExcelContent;
         }
-
-
-        public bool ExportToExcel(List<ExcelContent> dataToExport)
-        {
-            using (FileStream stream = new FileStream("Scalone.xls", FileMode.Create, FileAccess.Write))
-            {
-                IWorkbook wb = new HSSFWorkbook();
-                ISheet ws = wb.CreateSheet("Scalone");
-
-                //nagłówek
-                IRow header = ws.CreateRow(0);
-
-                header.CreateCell(0).SetCellValue("Lp");
-                header.CreateCell(1).SetCellValue("Kod");
-                header.CreateCell(2).SetCellValue("Nazwa");
-                header.CreateCell(3).SetCellValue("Liczba sztuk");
-                header.CreateCell(4).SetCellValue("Cena");
-                header.CreateCell(5).SetCellValue("Wartość brutto");
-
-                int rowNum = 1;
-
-                foreach (ExcelContent item in dataToExport)
-                {
-                    IRow row = ws.CreateRow(rowNum);
-
-                    row.CreateCell(0).SetCellValue(rowNum);
-                    row.CreateCell(1).SetCellValue(item.BarCode);
-                    row.CreateCell(2).SetCellValue(item.ProductName);
-                    row.CreateCell(3).SetCellValue(item.NumberOfItems);
-                    row.CreateCell(4).SetCellValue(item.ItemGrosValue);
-                    row.CreateCell(5).SetCellValue(item.TotalGrosValue);
-
-                    rowNum += 1;
-                }
-
-                wb.Write(stream);
-            }
-
-            return true;
-        }
-
+        
         #region PrivateMethods
 
         /// <summary>
@@ -134,9 +85,9 @@ namespace MmMaker.Model
         {
             HSSFWorkbook wb;
 
-            using (FileStream stream = new FileStream(FileName, FileMode.Open, FileAccess.Read))
+            using (_stream)
             {
-                wb = new HSSFWorkbook(stream);
+                wb = new HSSFWorkbook(_stream);
             }
 
             return wb;
@@ -175,7 +126,7 @@ namespace MmMaker.Model
             }
             catch (System.Exception ex)
             {
-                logger.Error("Wystąpił błąd w trakcie oznaczania wiersza danych o nr: {0} w pliku: {1}. Original error message: {2}", row.RowNum, FileName, ex.Message);
+                logger.Error("Wystąpił błąd w trakcie oznaczania wiersza danych o nr: {0}. Original error message: {1}", row.RowNum, ex.Message);
 
                 return false;
             }
@@ -202,4 +153,6 @@ namespace MmMaker.Model
 
         #endregion  
     }
+
 }
+

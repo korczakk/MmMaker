@@ -16,6 +16,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MmMaker.Service;
 using MmMaker.Model;
+using MmMakerExcelManager;
+using System.IO;
 
 namespace MmMaker
 {
@@ -75,12 +77,12 @@ namespace MmMaker
             string FileName = dialog.OpenDialog();
 
             //otwarcie pliku XLS
-            ExcelFile excelFile = new ExcelFile(FileName);
-
+            FileStream fileStream = new FileStream(FileName, FileMode.Open, FileAccess.Read);
+            ExcelParser xlsManager = new ExcelParser(fileStream);            
 
             //parsowanie pliku xls
             List<ExcelContent> fileContent = new List<ExcelContent>();
-            fileContent = excelFile.ParseExcel();
+            fileContent = xlsManager.ParseExcel();
 
             //dodanie wyniku parsowania do kolekcji
             ExcelFiles.Add(new ExcelFile()
@@ -108,8 +110,8 @@ namespace MmMaker
             List<ExcelContent> OrderedRows = rows.OrderBy(x => x.ProductName).ToList();
 
             //wywołaj eksport
-            ExcelFile xlsFile = new ExcelFile();
-            bool writeStatus = xlsFile.ExportToExcel(OrderedRows);
+            MmMakerExporter exporter = new MmMakerExporter(new FileStream("scalone.xls", FileMode.Create, FileAccess.Write));
+            bool writeStatus = exporter.ExportToExcel(OrderedRows);
 
             //pokaż komunikat
             if (writeStatus)
